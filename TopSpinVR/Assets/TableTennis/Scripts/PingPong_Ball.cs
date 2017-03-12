@@ -13,8 +13,11 @@ public class PingPong_Ball : MonoBehaviour
 
     public string batStatus;
 
-    private float speed = 5;
+    private float forwardSpeed = 5.0f;
+    private float downSpeed = 1.0f;
+    private float sideSpeed = 0.8f;
     private Vector3 firstpostion;
+    private Quaternion firstRotation;
     private bool firstServe;
     private Transform batTransform;
     private int groundCount;
@@ -23,6 +26,7 @@ public class PingPong_Ball : MonoBehaviour
     void Start()
     {
         firstpostion = transform.position;
+        firstRotation = transform.rotation;
     }
 
     public void Reset()
@@ -31,7 +35,9 @@ public class PingPong_Ball : MonoBehaviour
 
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         transform.position = firstpostion;
+        transform.rotation = firstRotation;
         aiBatScript.Reset();
         userBatScript.Reset();
 
@@ -40,6 +46,7 @@ public class PingPong_Ball : MonoBehaviour
 
     public void Serve(Transform t)
     {
+        // TODO: don't know what variable "factor" is for
         if (Random.Range(1, 3) == 1)
         {
             factor = -1;
@@ -51,16 +58,16 @@ public class PingPong_Ball : MonoBehaviour
         reset = true;
 
         GetComponent<Rigidbody>().useGravity = true;
-        GetComponent<Rigidbody>().AddForce(Vector3.down * 0.7f, ForceMode.Impulse);
-        GetComponent<Rigidbody>().AddForce(transform.forward * speed, ForceMode.Impulse);
+        GetComponent<Rigidbody>().AddForce(Vector3.down * downSpeed, ForceMode.VelocityChange);
+        GetComponent<Rigidbody>().AddForce(transform.forward * forwardSpeed, ForceMode.VelocityChange);
 
         if (Random.Range(1, 3) == 1)
         {
-            GetComponent<Rigidbody>().AddForce(transform.right * 0.4f * 2, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddForce(transform.right * sideSpeed, ForceMode.VelocityChange);
         }
         else
         {
-            GetComponent<Rigidbody>().AddForce(transform.right * -0.4f * 2, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddForce(transform.right * -sideSpeed, ForceMode.VelocityChange);
         }
 
         firstServe = true;
@@ -81,7 +88,7 @@ public class PingPong_Ball : MonoBehaviour
             if (firstServe)
             {
                 batTransform.GetComponent<Collider>().isTrigger = false;
-                batTransform.GetComponent<Rigidbody>().isKinematic = true;
+                //batTransform.GetComponent<Rigidbody>().isKinematic = true;
                 batTransform.GetComponent<Human_Player>().firstServe = false;
                 firstServe = false;
             }
@@ -97,6 +104,7 @@ public class PingPong_Ball : MonoBehaviour
                 Reset();
                 groundCount = 0;
 
+                // TODO: doesn't matter if it's aibat or userbat. Logics are the same.
                 if (batStatus == "abat")
                 {
                     if (tableSideName == "UserSideTable")
