@@ -7,6 +7,12 @@ public class Human_Player : MonoBehaviour
     private Vector3 currentPosition;
     private Vector3 lastPosition;
 
+    private const float mouseSpeed = 0.05f;
+    private const float paddleXMin = -1.0f;
+    private const float paddleXMax = 1.0f;
+    private const float paddleYMin = 0.5f;
+    private const float paddleYMax = 1.5f;
+
     public float speed;
 
     public float lastVelocity;
@@ -69,20 +75,20 @@ public class Human_Player : MonoBehaviour
 			}
 			else
 			{
-				transform.position = new Vector3(Mathf.Lerp(transform.position.x,transform.position.x+Input.GetAxis("Mouse X"),0.2f),Mathf.Lerp(transform.position.y,transform.position.y+Input.GetAxis("Mouse Y"),0.2f),transform.position.z);
+				transform.position = new Vector3(Mathf.Lerp(transform.position.x,transform.position.x+Input.GetAxis("Mouse X"), mouseSpeed),Mathf.Lerp(transform.position.y,transform.position.y+Input.GetAxis("Mouse Y"), mouseSpeed),transform.position.z);
 			}
 			
 			
 			
-			if(transform.position.x > 4)
-				transform.position = new Vector3(4,transform.position.y,transform.position.z);
-			if(transform.position.x < -4)
-				transform.position = new Vector3(-4,transform.position.y,transform.position.z);
+			if(transform.position.x > paddleXMax)
+				transform.position = new Vector3(paddleXMax,transform.position.y,transform.position.z);
+			if(transform.position.x < paddleXMin)
+				transform.position = new Vector3(paddleXMin,transform.position.y,transform.position.z);
 				
-			if(transform.position.y < 1.5f)
-				transform.position = new Vector3(transform.position.x,1.5f,transform.position.z);
-			if(transform.position.y > 2.5)
-				transform.position = new Vector3(transform.position.x,2.5f,transform.position.z);
+			if(transform.position.y < paddleYMin)
+				transform.position = new Vector3(transform.position.x,paddleYMin,transform.position.z);
+			if(transform.position.y > paddleYMax)
+				transform.position = new Vector3(transform.position.x, paddleYMax,transform.position.z);
 		}
     }
 
