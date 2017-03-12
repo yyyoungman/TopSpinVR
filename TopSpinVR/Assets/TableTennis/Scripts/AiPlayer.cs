@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AI_Player : MonoBehaviour {
+public class AiPlayer : MonoBehaviour {
 
 	public float batSpeed;
 
@@ -80,7 +80,7 @@ public class AI_Player : MonoBehaviour {
 			}
 
 			
-			other.rigidbody.GetComponent<PingPong_Ball>().batStatus = "abat";
+			other.rigidbody.GetComponent<PingPongBall>().batStatus = "abat";
 			speed = 15 * 0.8f * ballMassScale;
 			other.rigidbody.velocity = Vector3.zero;
 			other.rigidbody.isKinematic = true;

@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PingPong_Ball : MonoBehaviour
+public class PingPongBall : MonoBehaviour
 {
 
     public int factor;
 
     public bool reset = false;
 
-    public Human_Player userBatScript;
-    public AI_Player aiBatScript;
+    public HumanPlayer userBatScript;
+    public AiPlayer aiBatScript;
 
     public string batStatus;
 
@@ -76,7 +76,6 @@ public class PingPong_Ball : MonoBehaviour
 
     void OnCollisionEnter(Collision collisionInfo)
     {
-
         if (collisionInfo.collider.name == "UserSideTable")
         {
             userBatScript.RegisterSpin();
@@ -89,7 +88,7 @@ public class PingPong_Ball : MonoBehaviour
             {
                 batTransform.GetComponent<Collider>().isTrigger = false;
                 //batTransform.GetComponent<Rigidbody>().isKinematic = true;
-                batTransform.GetComponent<Human_Player>().firstServe = false;
+                batTransform.GetComponent<HumanPlayer>().firstServe = false;
                 firstServe = false;
             }
 
@@ -109,12 +108,12 @@ public class PingPong_Ball : MonoBehaviour
                 {
                     if (tableSideName == "UserSideTable")
                     {
-                        AI_Player.points++;
+                        AiPlayer.points++;
                         //CameraFollow.aiPoints = AiBat.points.ToString();
                     }
                     if (tableSideName == "AiSideTable")
                     {
-                        Human_Player.points++;
+                        HumanPlayer.points++;
                         //CameraFollow.userPoints = UserBat.points.ToString();
                     }
                 }
@@ -123,12 +122,12 @@ public class PingPong_Ball : MonoBehaviour
                 {
                     if (tableSideName == "AiSideTable")
                     {
-                        Human_Player.points++;
+                        HumanPlayer.points++;
                         //CameraFollow.userPoints = UserBat.points.ToString();
                     }
                     if (tableSideName == "UserSideTable")
                     {
-                        Human_Player.points++;
+                        HumanPlayer.points++;
                         //CameraFollow.aiPoints = AiBat.points.ToString();
                     }
                 }
