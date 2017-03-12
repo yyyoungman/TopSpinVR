@@ -13,7 +13,7 @@ public class PingPong_Ball : MonoBehaviour
 
     public string batStatus;
 
-    private float forwardSpeed = 4.0f;
+    private float forwardSpeed = 5.0f;
     private float downSpeed = 1.0f;
     private float sideSpeed = 0.8f;
     private Vector3 firstpostion;
@@ -83,18 +83,18 @@ public class PingPong_Ball : MonoBehaviour
             tableSideName = "UserSideTable";
         }
 
-        /*if (collisionInfo.collider.name == "AiSideTable")
+        if (collisionInfo.collider.name == "AiSideTable")
         {
             if (firstServe)
             {
                 batTransform.GetComponent<Collider>().isTrigger = false;
-                batTransform.GetComponent<Rigidbody>().isKinematic = true;
+                //batTransform.GetComponent<Rigidbody>().isKinematic = true;
                 batTransform.GetComponent<Human_Player>().firstServe = false;
                 firstServe = false;
             }
 
             tableSideName = "AiSideTable";
-        }*/
+        }
 
         if (collisionInfo.collider.name == "Wall")
         {

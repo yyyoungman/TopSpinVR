@@ -13,6 +13,8 @@ public class Human_Player : MonoBehaviour
     private const float paddleYMin = 0.5f;
     private const float paddleYMax = 1.5f;
 
+    private const float ballMassScale = 0.1f;
+
     public float speed;
 
     public float lastVelocity;
@@ -115,16 +117,16 @@ public class Human_Player : MonoBehaviour
             other.transform.position = other.contacts[0].point;
             other.transform.position += new Vector3(0, 0, 0.1f);
             other.rigidbody.isKinematic = false;
-            other.rigidbody.AddForce(transform.forward * 15, ForceMode.Impulse);
+            other.rigidbody.AddForce(transform.forward * 15 * ballMassScale, ForceMode.Impulse);
 
-            other.rigidbody.AddForce(transform.right * diff * 2, ForceMode.Impulse);
-            if (other.transform.position.y < 1.68f)
+            other.rigidbody.AddForce(transform.right * diff * 2 * ballMassScale, ForceMode.Impulse);
+            if (other.transform.position.y < paddleYMin)
             {
-                other.rigidbody.AddForce(Vector3.up * 1.6f, ForceMode.Impulse);
+                other.rigidbody.AddForce(Vector3.up * 1.6f * ballMassScale, ForceMode.Impulse);
             }
             else
             {
-                other.rigidbody.AddForce(Vector3.up * 1.2f, ForceMode.Impulse);
+                other.rigidbody.AddForce(Vector3.up * 1.2f * ballMassScale, ForceMode.Impulse);
             }
 
             ballParticalEffect.GetComponent<ParticleRenderer>().materials[0].mainTexture = particleTexture;
