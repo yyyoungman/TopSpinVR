@@ -57,10 +57,6 @@ public class Human_Player : MonoBehaviour
         }
         else
         {
-        }
-        /*
-        if (canMoveWithMouse)
-        {
 			transform.eulerAngles = new Vector3 (transform.eulerAngles.x,transform.eulerAngles.y,transform.position.x*-10); //= new  transform.position.x*-10;
 			
 			
@@ -88,7 +84,6 @@ public class Human_Player : MonoBehaviour
 			if(transform.position.y > 2.5)
 				transform.position = new Vector3(transform.position.x,2.5f,transform.position.z);
 		}
-        */
     }
 
     void OnCollisionEnter(Collision other)
