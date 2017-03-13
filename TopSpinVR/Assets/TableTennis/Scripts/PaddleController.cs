@@ -8,8 +8,8 @@ public class PaddleController : MonoBehaviour
     
     public GribMode gribMode;
 
-    public Vector3 gribBasicPosition;
-    public Vector3 gribBasicRotation;
+    private Vector3 gribBasicPosition;
+    private Vector3 gribBasicRotation;
 
     private const float mouseSpeed = 0.05f;
     private const float paddleXMin = -1.0f;
@@ -22,13 +22,13 @@ public class PaddleController : MonoBehaviour
     {
         if (gribMode == GribMode.PenHold)
         {
-            gribBasicPosition = Vector3.zero;
-            gribBasicRotation = Vector3.zero;
+            gribBasicPosition = new Vector3(0.01f, -0.024f, 0.01f);
+            gribBasicRotation = new Vector3(90, 0, 0);
         }
         else if (gribMode == GribMode.ShakeHands)
         {
-            gribBasicPosition = Vector3.zero;
-            gribBasicRotation = Vector3.zero;
+            gribBasicPosition = new Vector3(0f, 0f, 0.01f);
+            gribBasicRotation = new Vector3(0, 90, 45);
         }
         else
         {
@@ -46,7 +46,8 @@ public class PaddleController : MonoBehaviour
         {
             if (OVRInput.GetControllerPositionTracked(OVRInput.Controller.RTouch))
             {
-                transform.localPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch) + gribBasicPosition;
+                transform.localPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
+                transform.Translate(gribBasicPosition);
             }
             else
             {
@@ -56,7 +57,7 @@ public class PaddleController : MonoBehaviour
             if (OVRInput.GetControllerOrientationTracked(OVRInput.Controller.RTouch))
             {
                 transform.localRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTouch);
-                transform.Rotate(gribBasicRotation, Space.World);
+                transform.Rotate(gribBasicRotation);
             }
             else
             {

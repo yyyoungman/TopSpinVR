@@ -36,6 +36,7 @@ public class PingPongBall : MonoBehaviour
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        firstServe = true;
         transform.position = firstpostion;
         transform.rotation = firstRotation;
         aiBatScript.Reset();

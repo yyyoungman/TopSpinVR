@@ -74,6 +74,7 @@ LightmapSettings:
     m_MixedBakeMode: 1
     m_BakeBackend: 0
     m_PVRSampling: 1
+    m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
     m_PVRFiltering: 0
@@ -146,15 +147,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 20299261786974026, guid: 6fda36bc2aaf825459a3efa2d9f8936e,
+    - target: {fileID: 114093868987121628, guid: 6fda36bc2aaf825459a3efa2d9f8936e,
         type: 2}
-      propertyPath: field of view
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20627018010277736, guid: 6fda36bc2aaf825459a3efa2d9f8936e,
-        type: 2}
-      propertyPath: field of view
-      value: 0.00007841117
+      propertyPath: gribMode
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fda36bc2aaf825459a3efa2d9f8936e, type: 2}
@@ -477,7 +473,8 @@ Light:
   m_Lightmapping: 1
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_CCT: 6500
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &1584411478
