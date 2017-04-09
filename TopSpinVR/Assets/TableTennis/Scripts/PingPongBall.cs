@@ -90,9 +90,9 @@ public class PingPongBall : MonoBehaviour
         {
             if (firstServe)
             {
-                batTransform.GetComponent<Collider>().isTrigger = false;
+                //batTransform.GetComponent<Collider>().isTrigger = false;
                 //batTransform.GetComponent<Rigidbody>().isKinematic = true;
-                batTransform.GetComponent<HumanPlayer>().firstServe = false;
+                //batTransform.GetComponent<HumanPlayer>().firstServe = false;
                 //firstServe = false;
             }
 

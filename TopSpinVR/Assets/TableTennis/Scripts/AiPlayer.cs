@@ -69,7 +69,7 @@ using System.Collections;
 
         }
 
-        void OnCollisionEnter(Collision other)
+        /*void OnCollisionEnter(Collision other)
         {
             if (other.collider.tag == "ball")
             {
@@ -126,7 +126,7 @@ using System.Collections;
         public void HitDirection(float x)
         {
             hitDirection = x;
-        }
+        }*/
 
         public void Reset()
         {
