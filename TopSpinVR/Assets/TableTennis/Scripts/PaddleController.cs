@@ -11,6 +11,13 @@ public class PaddleController : MonoBehaviour
     public Vector3 gribBasicPosition;
     public Vector3 gribBasicRotation;
 
+    public enum mode {AiMode, controlMode };
+    public mode currentMode;
+
+    //public Ai
+    public Vector3 position;
+    public Vector3 rotation;
+
     private const float mouseSpeed = 0.05f;
     private const float paddleXMin = -1.0f;
     private const float paddleXMax = 1.0f;

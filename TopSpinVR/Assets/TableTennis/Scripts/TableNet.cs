@@ -9,6 +9,7 @@ public class TableNet : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
+        return;
 			if(other.GetComponent<Collider>().tag == "ball")
 			{
 					if(other.GetComponent<Rigidbody>().GetComponent<PingPongBall>().batStatus == "abat" && getCollision)

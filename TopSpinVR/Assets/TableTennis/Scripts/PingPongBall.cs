@@ -8,8 +8,9 @@ public class PingPongBall : MonoBehaviour
 
     public bool reset = false;
 
-    public HumanPlayer userBatScript;
+    //public HumanPlayer userBatScript;
     public AiPlayer aiBatScript;
+    public PaddleFace userPaddleFace;
 
     public string batStatus;
 
@@ -39,7 +40,8 @@ public class PingPongBall : MonoBehaviour
         transform.position = firstpostion;
         transform.rotation = firstRotation;
         aiBatScript.Reset();
-        userBatScript.Reset();
+        //userBatScript.Reset();
+        userPaddleFace.Reset();
 
     }
 
@@ -76,9 +78,10 @@ public class PingPongBall : MonoBehaviour
 
     void OnCollisionEnter(Collision collisionInfo)
     {
+        Debug.Log(collisionInfo.collider.name + GetComponent<Rigidbody>().velocity);
         if (collisionInfo.collider.name == "UserSideTable")
         {
-            userBatScript.RegisterSpin();
+            //userBatScript.RegisterSpin();
             tableSideName = "UserSideTable";
         }
 
@@ -89,7 +92,7 @@ public class PingPongBall : MonoBehaviour
                 batTransform.GetComponent<Collider>().isTrigger = false;
                 //batTransform.GetComponent<Rigidbody>().isKinematic = true;
                 batTransform.GetComponent<HumanPlayer>().firstServe = false;
-                firstServe = false;
+                //firstServe = false;
             }
 
             tableSideName = "AiSideTable";
