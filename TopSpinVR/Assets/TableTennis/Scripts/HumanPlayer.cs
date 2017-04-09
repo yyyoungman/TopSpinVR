@@ -40,7 +40,6 @@ public class HumanPlayer : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-
         if (other.collider.tag == "ball" && !firstServe)
         {
             currentPosition = transform.position;
@@ -77,7 +76,6 @@ public class HumanPlayer : MonoBehaviour
 
             AiPlayer.move = true;
             aiBat.HitDirection(diff);
-
         }
     }
 
