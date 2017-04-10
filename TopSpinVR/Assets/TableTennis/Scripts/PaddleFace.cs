@@ -5,6 +5,7 @@ using UnityEngine;
 //{
     public class PaddleFace : MonoBehaviour
     {
+        public Transform tableTransform;
         private const float paddleXMin = -1.0f;
         private const float paddleXMax = 1.0f;
         private const float paddleYMin = 0.5f;
@@ -13,6 +14,8 @@ using UnityEngine;
         private const float contactTimeCoeff = 1;
         private const float bounciness = 1;
         private const float friction = 1;
+
+        private float tableHeight;
 
         private Vector3 lastPosition;
 
@@ -24,6 +27,7 @@ using UnityEngine;
         // Use this for initialization
         void Start()
         {
+        tableHeight = tableTransform.position.y;
 
         }
 
@@ -137,10 +141,16 @@ using UnityEngine;
                         }
                         else
                         {
-                            other.rigidbody.AddForce(Vector3.up * 1.5f * 8.0f * ballMassScale, ForceMode.Impulse);
+                        // Apply variable up-direction force, based on the height of the current paddle
+                        // The higher the paddle is, the less up force it applies
+                        float relaHeight = transform.position.y - tableHeight;
+                        float forceUpCoeff = 1 - relaHeight;
+                        forceUpCoeff = Mathf.Sqrt(forceUpCoeff);
+
+                            other.rigidbody.AddForce(Vector3.up * 1.5f * 8.0f * ballMassScale * forceUpCoeff, ForceMode.Impulse);
                             other.rigidbody.AddForce(transform.forward * speed, ForceMode.Impulse);
 
-                            other.rigidbody.AddForce(transform.right * hitDirection * 2 * ballMassScale, ForceMode.Impulse);
+                            //other.rigidbody.AddForce(transform.right * hitDirection * 2 * ballMassScale, ForceMode.Impulse);
                         }
 
                         /*public Texture2D particleTexture;
