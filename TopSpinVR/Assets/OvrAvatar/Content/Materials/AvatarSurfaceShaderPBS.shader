@@ -28,7 +28,7 @@
 			v2f vert(appdata_full v) {
 				// Output
 				v2f output;
-				output.position = mul(UNITY_MATRIX_MVP, v.vertex);
+				output.position = UnityObjectToClipPos(v.vertex);
 				return output;
 			}
 
