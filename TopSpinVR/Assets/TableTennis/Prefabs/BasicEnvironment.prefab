@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1242728334187592}
+  m_IsPrefabParent: 1
+--- !u!1 &1242728334187592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4948186191240690}
+  - component: {fileID: 114383248967309860}
+  m_Layer: 0
+  m_Name: BasicEnvironment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4948186191240690
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1242728334187592}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.1509225, y: 0.8283254, z: 0.7089298}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114383248967309860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1242728334187592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b9067467f2b1a345985198b98ddc020, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - prefab: {fileID: 1355764449237744, guid: 21ccb76544143404b87a258d570bbb70, type: 2}
+    disabled: 0
+    pcOnly: 0
+    oculusOnly: 0
+  - prefab: {fileID: 1117252557338592, guid: 4ea315452c157004d951f387a8a6c408, type: 2}
+    disabled: 0
+    pcOnly: 0
+    oculusOnly: 0
+  - prefab: {fileID: 1000012290535978, guid: 09ec921ac689f1440993ddbdf1ad0a45, type: 2}
+    disabled: 0
+    pcOnly: 0
+    oculusOnly: 0
+  - prefab: {fileID: 1784789600730232, guid: bc8d764f7558b7c4ea56034a48900b49, type: 2}
+    disabled: 0
+    pcOnly: 0
+    oculusOnly: 0
+  - prefab: {fileID: 1643596070739710, guid: 5d9771d0486ac2e4aa9774e24a5f372e, type: 2}
+    disabled: 0
+    pcOnly: 1
+    oculusOnly: 0
+  - prefab: {fileID: 1863258278237290, guid: 6fda36bc2aaf825459a3efa2d9f8936e, type: 2}
+    disabled: 0
+    pcOnly: 0
+    oculusOnly: 1
+  - prefab: {fileID: 0}
+    disabled: 0
+    pcOnly: 0
+    oculusOnly: 0

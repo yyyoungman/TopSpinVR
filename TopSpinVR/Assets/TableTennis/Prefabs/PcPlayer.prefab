@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4161722333941838}
   - component: {fileID: 114728124023148840}
   m_Layer: 0
-  m_Name: PcUserPaddle
+  m_Name: HumanPaddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,6 +72,7 @@ GameObject:
   - component: {fileID: 65298427784319684}
   - component: {fileID: 54142616254233582}
   - component: {fileID: 114204016883252466}
+  - component: {fileID: 114437805291235596}
   m_Layer: 0
   m_Name: PaddleFace
   m_TagString: Untagged
@@ -375,7 +376,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1738510993090938}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.29}
@@ -400,7 +401,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1738510993090938}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93e20b8be61cb4254833ff88993bfe72, type: 3}
   m_Name: 
@@ -412,6 +413,20 @@ MonoBehaviour:
   ballParticalEffect: {fileID: 0}
   firstServe: 1
   firstPostion: {x: 0, y: 0, z: 0}
+--- !u!114 &114437805291235596
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738510993090938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee25747ceec6a064bb96402627fb8e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tableTransform: {fileID: 0}
+  isServe: 1
+  currentMode: 1
 --- !u!114 &114457091148975998
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -437,8 +452,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gribMode: 0
-  gribBasicPosition: {x: 0, y: 0, z: 0}
-  gribBasicRotation: {x: 0, y: 0, z: 0}
+  currentMode: 0
+  position: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
 --- !u!124 &124265853496912314
 Behaviour:
   m_ObjectHideFlags: 1
