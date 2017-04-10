@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Runtime.InteropServices;
+using Oculus.Avatar;
 
 //This needs to be the csharp equivalent of ovrAvatarCapabilities in OVR_Avatar.h
 [Flags]
@@ -36,6 +37,8 @@ public struct ovrAvatarMessage_AssetLoaded {
 public enum ovrAvatarAssetType {
     Mesh,
     Texture,
+    Pose,
+    Material,
     Count
 };
 
@@ -76,6 +79,7 @@ public enum ovrAvatarTextureFormat {
 	RGB24,
 	DXT1,
 	DXT5,
+	ASTC_RGB_6x6,
 	Count
 };
 
@@ -335,6 +339,16 @@ public struct ovrAvatarMaterialState{
     }
 };
 
+public class OvrMaterialWrapper : OvrAvatarAsset
+{
+    public OvrMaterialWrapper(UInt64 id, IntPtr mat) 
+    {
+        assetID = id;
+        material = CAPI.ovrAvatarAsset_GetMaterialState(mat);
+    }
+
+    public ovrAvatarMaterialState material;
+}
 // This needs to be the csharp equivalent of ovrAvatarSkinnedMeshPose in OVR_Avatar.h
 public struct ovrAvatarSkinnedMeshPose
 {
@@ -401,10 +415,17 @@ namespace Oculus.Avatar
 {
     public class CAPI
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        private const string LibFile = "ovravatarloader";
+
+        [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ovrAvatar_InitializeAndroidUnity(string appID);
+#else
         private const string LibFile = "libovravatar";
 
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ovrAvatar_Initialize(string appID);
+#endif
 
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ovrAvatar_Shutdown();
@@ -480,10 +501,10 @@ namespace Oculus.Avatar
         public static extern void ovrAvatar_SetRightControllerVisibility(IntPtr avatar, bool show);
 
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
-        public static extern UInt64 ovrAvatarComponent_Count(IntPtr avatar);
+        public static extern UInt32 ovrAvatarComponent_Count(IntPtr avatar);
 
         public static ovrAvatarComponent ovrAvatarComponent_Get(
-            IntPtr avatar, UInt64 index)
+            IntPtr avatar, UInt32 index)
         {
             IntPtr ptr = ovrAvatarComponent_Get_Native(avatar, index);
             return (ovrAvatarComponent)Marshal.PtrToStructure(
@@ -492,7 +513,7 @@ namespace Oculus.Avatar
 
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl, EntryPoint =
             "ovrAvatarComponent_Get")]
-        public static extern IntPtr ovrAvatarComponent_Get_Native(IntPtr avatar, UInt64 index);
+        public static extern IntPtr ovrAvatarComponent_Get_Native(IntPtr avatar, UInt32 index);
 
         public static ovrAvatarBaseComponent ovrAvatarPose_GetBaseComponent(
             IntPtr avatar)
@@ -594,6 +615,15 @@ namespace Oculus.Avatar
             "ovrAvatarAsset_GetTextureData")]
         private static extern IntPtr ovrAvatarAsset_GetTextureData_Native(IntPtr assetPtr);
 
+        [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl, EntryPoint =
+            "ovrAvatarAsset_GetMaterialData")]
+        private static extern IntPtr ovrAvatarAsset_GetMaterialData_Native(IntPtr assetPtr);
+        public static ovrAvatarMaterialState ovrAvatarAsset_GetMaterialState(IntPtr assetPtr)
+        {
+            IntPtr ptr = ovrAvatarAsset_GetMaterialData_Native(assetPtr);
+            return (ovrAvatarMaterialState)Marshal.PtrToStructure(ptr, typeof(ovrAvatarMaterialState));
+        }
+
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
         public static extern ovrAvatarRenderPartType ovrAvatarRenderPart_GetType(IntPtr renderPart);
 
@@ -617,6 +647,9 @@ namespace Oculus.Avatar
         public static extern ovrAvatarVisibilityFlags ovrAvatarSkinnedMeshRender_GetVisibilityMask(IntPtr renderPart);
 
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool ovrAvatarSkinnedMeshRender_MaterialStateChanged(IntPtr renderPart);
+
+        [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
         public static extern ovrAvatarVisibilityFlags ovrAvatarSkinnedMeshRenderPBS_GetVisibilityMask(IntPtr renderPart);
 
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
@@ -626,7 +659,13 @@ namespace Oculus.Avatar
         public static extern UInt64 ovrAvatarSkinnedMeshRender_GetDirtyJoints(IntPtr renderPart);
 
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
+        public static extern UInt64 ovrAvatarSkinnedMeshRenderPBS_GetDirtyJoints(IntPtr renderPart);
+
+        [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
         public static extern ovrAvatarTransform ovrAvatarSkinnedMeshRender_GetJointTransform(IntPtr renderPart, UInt32 jointIndex);
+
+        [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
+        public static extern ovrAvatarTransform ovrAvatarSkinnedMeshRenderPBS_GetJointTransform(IntPtr renderPart, UInt32 jointIndex);
 
         [DllImport(LibFile, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt64 ovrAvatarSkinnedMeshRenderPBS_GetAlbedoTextureAssetID(IntPtr renderPart);

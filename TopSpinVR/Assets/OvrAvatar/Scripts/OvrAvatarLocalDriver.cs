@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class OvrAvatarLocalDriver : OvrAvatarDriver {
 
+    private const float mobileBaseHeadHeight = 1.7f;
+
     float voiceAmplitude = 0.0f;
     ControllerPose GetControllerPose(OVRInput.Controller controller)
     {
@@ -41,10 +43,15 @@ public class OvrAvatarLocalDriver : OvrAvatarDriver {
 
     public override bool GetCurrentPose(out PoseFrame pose)
     {
+        Vector3 headPos = UnityEngine.VR.InputTracking.GetLocalPosition(UnityEngine.VR.VRNode.CenterEye);
+#if UNITY_ANDROID && !UNITY_EDITOR
+        headPos.y += mobileBaseHeadHeight;
+#endif
+
         pose = new PoseFrame
         {
             voiceAmplitude = voiceAmplitude,
-            headPosition = UnityEngine.VR.InputTracking.GetLocalPosition(UnityEngine.VR.VRNode.CenterEye),
+            headPosition = headPos,
             headRotation = UnityEngine.VR.InputTracking.GetLocalRotation(UnityEngine.VR.VRNode.CenterEye),
             handLeftPosition = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch),
             handLeftRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTouch),

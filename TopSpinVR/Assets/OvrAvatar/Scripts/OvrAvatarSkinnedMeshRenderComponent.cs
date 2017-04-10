@@ -7,34 +7,44 @@ public class OvrAvatarSkinnedMeshRenderComponent : OvrAvatarRenderComponent
 {
     Shader surface;
     Shader surfaceSelfOccluding;
-    SkinnedMeshRenderer mesh;
-    Transform[] bones;
-
+    bool previouslyActive = false;
+        
     internal void Initialize(ovrAvatarRenderPart_SkinnedMeshRender skinnedMeshRender, Shader surface, Shader surfaceSelfOccluding, int thirdPersonLayer, int firstPersonLayer, int sortOrder)
     {
         this.surfaceSelfOccluding = surfaceSelfOccluding != null ? surfaceSelfOccluding :  Shader.Find("OvrAvatar/AvatarSurfaceShaderSelfOccluding");
         this.surface = surface != null ? surface : Shader.Find("OvrAvatar/AvatarSurfaceShader");
         this.mesh = CreateSkinnedMesh(skinnedMeshRender.meshAssetID, skinnedMeshRender.visibilityMask, thirdPersonLayer, firstPersonLayer, sortOrder);
-        this.bones = mesh.bones;
-        UpdateMeshMaterial(skinnedMeshRender.visibilityMask);
+        bones = mesh.bones;
+        UpdateMeshMaterial(skinnedMeshRender.visibilityMask, mesh);
     }
 
-    internal void UpdateSkinnedMeshRender(OvrAvatar avatar, IntPtr renderPart)
+    public void UpdateSkinnedMeshRender(OvrAvatarComponent component, OvrAvatar avatar, IntPtr renderPart)
     {
-        ovrAvatarMaterialState materialState = CAPI.ovrAvatarSkinnedMeshRender_GetMaterialState(renderPart);
         ovrAvatarVisibilityFlags visibilityMask = CAPI.ovrAvatarSkinnedMeshRender_GetVisibilityMask(renderPart);
         ovrAvatarTransform localTransform = CAPI.ovrAvatarSkinnedMeshRender_GetTransform(renderPart);
-        UpdateSkinnedMesh(avatar, mesh, bones, localTransform, visibilityMask, renderPart);
-        UpdateMeshMaterial(visibilityMask);
-        UpdateAvatarMaterial(mesh.sharedMaterial, materialState);
+        UpdateSkinnedMesh(avatar, bones, localTransform, visibilityMask, renderPart);
+
+        UpdateMeshMaterial(visibilityMask, mesh == null ? component.RootMeshComponent : mesh);
+        bool isActive = this.gameObject.activeSelf;
+
+        if( mesh != null )
+        {
+            bool changedMaterial = CAPI.ovrAvatarSkinnedMeshRender_MaterialStateChanged(renderPart);
+            if (changedMaterial || (!previouslyActive && isActive))
+            {
+                ovrAvatarMaterialState materialState = CAPI.ovrAvatarSkinnedMeshRender_GetMaterialState(renderPart);
+                component.UpdateAvatarMaterial(mesh.sharedMaterial, materialState);
+            }
+        }
+        previouslyActive = isActive;
     }
 
-    private void UpdateMeshMaterial(ovrAvatarVisibilityFlags visibilityMask)
+    private void UpdateMeshMaterial(ovrAvatarVisibilityFlags visibilityMask, SkinnedMeshRenderer rootMesh)
     {
         Shader shader = (visibilityMask & ovrAvatarVisibilityFlags.SelfOccluding) != 0 ? surfaceSelfOccluding : surface;
-        if (mesh.sharedMaterial == null || mesh.sharedMaterial.shader != shader)
+        if (rootMesh.sharedMaterial == null || rootMesh.sharedMaterial.shader != shader)
         {
-            mesh.sharedMaterial = CreateAvatarMaterial(gameObject.name + "_material", shader);
+            rootMesh.sharedMaterial = CreateAvatarMaterial(gameObject.name + "_material", shader);
         }
     }
 }

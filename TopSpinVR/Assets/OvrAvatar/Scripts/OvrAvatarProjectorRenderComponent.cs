@@ -26,11 +26,12 @@ public class OvrAvatarProjectorRenderComponent : OvrAvatarRenderComponent {
         }
     }
 
-    internal void UpdateProjectorRender(ovrAvatarRenderPart_ProjectorRender render)
+    internal void UpdateProjectorRender(OvrAvatarComponent component, ovrAvatarRenderPart_ProjectorRender render)
     {
         OvrAvatar.ConvertTransform(render.localTransform, this.transform);
         material.SetMatrix("_ProjectorWorldToLocal", this.transform.worldToLocalMatrix);
-        UpdateAvatarMaterial(material, render.materialState);
+        component.UpdateAvatarMaterial(material, render.materialState);
+        
     }
 
     void OnDrawGizmos()

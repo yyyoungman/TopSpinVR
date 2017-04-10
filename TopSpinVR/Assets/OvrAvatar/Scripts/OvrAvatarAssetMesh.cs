@@ -20,6 +20,7 @@ public class OvrAvatarAssetMesh : OvrAvatarAsset {
         Vector3[] normals = new Vector3[vertexCount];
         Vector4[] tangents = new Vector4[vertexCount];
         Vector2[] uv = new Vector2[vertexCount];
+        Color[] colors = new Color[vertexCount];
         BoneWeight[] boneWeights = new BoneWeight[vertexCount];
 
         long vertexSize = (long)Marshal.SizeOf(typeof(ovrAvatarMeshVertex));
@@ -33,6 +34,8 @@ public class OvrAvatarAssetMesh : OvrAvatarAsset {
             normals[i] = new Vector3(vertex.nx, vertex.ny, -vertex.nz);
             tangents[i] = new Vector4(vertex.tx, vertex.ty, -vertex.tz, vertex.tw);
             uv[i] = new Vector2(vertex.u, vertex.v);
+            colors[i] = new Color(0, 0, 0, 1);
+
             boneWeights[i].boneIndex0 = vertex.blendIndices[0];
             boneWeights[i].boneIndex1 = vertex.blendIndices[1];
             boneWeights[i].boneIndex2 = vertex.blendIndices[2];
@@ -47,6 +50,7 @@ public class OvrAvatarAssetMesh : OvrAvatarAsset {
         mesh.uv = uv;
         mesh.tangents = tangents;
         mesh.boneWeights = boneWeights;
+        mesh.colors = colors;
 
         skinnedBindPose = meshAssetData.skinnedBindPose;
 

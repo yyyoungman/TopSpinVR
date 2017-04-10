@@ -65,6 +65,8 @@ public class OvrAvatar : MonoBehaviour {
     List<float[]> voiceUpdates = new List<float[]>();
 
     public UInt64 oculusUserID;
+    public bool CombineMeshes = false;
+
     private IntPtr sdkAvatar = IntPtr.Zero;
     private HashSet<UInt64> assetLoadingIds = new HashSet<UInt64>();
     private Dictionary<string, OvrAvatarComponent> trackedComponents =
@@ -100,7 +102,10 @@ public class OvrAvatar : MonoBehaviour {
     private void AddAvatarComponent(GameObject componentObject, ovrAvatarComponent component) {
         OvrAvatarComponent ovrComponent = componentObject.AddComponent<OvrAvatarComponent>();
         trackedComponents.Add(component.name, ovrComponent);
-        for (UInt32 renderPartIndex = 0; renderPartIndex < component.renderPartCount; renderPartIndex++) {
+
+        bool combine_meshes = CombineMeshes && componentObject.name == "body";
+        for (UInt32 renderPartIndex = 0; renderPartIndex < component.renderPartCount; renderPartIndex++)
+        {
             GameObject renderPartObject = new GameObject();
             renderPartObject.name = GetRenderPartName(component, renderPartIndex);
             renderPartObject.transform.SetParent(componentObject.transform);
@@ -116,6 +121,7 @@ public class OvrAvatar : MonoBehaviour {
                     ovrRenderPart = AddSkinnedMeshRenderPBSComponent(renderPartObject, CAPI.ovrAvatarRenderPart_GetSkinnedMeshRenderPBS(renderPart));
                     break;
                 case ovrAvatarRenderPartType.ProjectorRender:
+                    combine_meshes = false;
                     ovrRenderPart = AddProjectorRenderComponent(renderPartObject, CAPI.ovrAvatarRenderPart_GetProjectorRender(renderPart));
                     break;
                 default:
@@ -124,6 +130,11 @@ public class OvrAvatar : MonoBehaviour {
                                       type.ToString()));
             }
             ovrComponent.RenderParts.Add(ovrRenderPart);
+        }
+
+        if (combine_meshes)
+        {
+            ovrComponent.StartMeshCombining(component);
         }
     }
 
@@ -158,7 +169,7 @@ public class OvrAvatar : MonoBehaviour {
         return null;
     }
 
-    private IntPtr GetRenderPart(ovrAvatarComponent component, UInt32 renderPartIndex)
+    static public IntPtr GetRenderPart(ovrAvatarComponent component, UInt32 renderPartIndex)
     {
         long offset = Marshal.SizeOf(typeof(IntPtr)) * renderPartIndex;
         IntPtr marshalPtr = new IntPtr(component.renderParts.ToInt64() + offset);
@@ -168,37 +179,12 @@ public class OvrAvatar : MonoBehaviour {
     private void UpdateAvatarComponent(ovrAvatarComponent component)
     {
         OvrAvatarComponent ovrComponent;
-        if (!trackedComponents.TryGetValue(component.name, out ovrComponent)) {
-            throw new Exception(
-                string.Format("trackedComponents didn't have {0}", component.name));
-        }
-        ConvertTransform(component.transform, ovrComponent.transform);
-        for (UInt32 renderPartIndex = 0; renderPartIndex < component.renderPartCount; renderPartIndex++)
+        if (!trackedComponents.TryGetValue(component.name, out ovrComponent))
         {
-            if (ovrComponent.RenderParts.Count <= renderPartIndex)
-            {
-                continue;
-            }
-            OvrAvatarRenderComponent renderComponent = ovrComponent.RenderParts[(int)renderPartIndex];
-            IntPtr renderPart = GetRenderPart(component, renderPartIndex);
-            ovrAvatarRenderPartType type = CAPI.ovrAvatarRenderPart_GetType(renderPart);
-            switch (type)
-            {
-                case ovrAvatarRenderPartType.SkinnedMeshRender:
-                    ((OvrAvatarSkinnedMeshRenderComponent)renderComponent).UpdateSkinnedMeshRender(this, renderPart);
-                    break;
-                case ovrAvatarRenderPartType.SkinnedMeshRenderPBS:
-                    ((OvrAvatarSkinnedMeshRenderPBSComponent)renderComponent).UpdateSkinnedMeshRenderPBS(this, renderPart);
-                    break;
-                case ovrAvatarRenderPartType.ProjectorRender:
-                    ((OvrAvatarProjectorRenderComponent)renderComponent).UpdateProjectorRender(CAPI.ovrAvatarRenderPart_GetProjectorRender(renderPart));
-                    break;
-                default:
-                    throw new NotImplementedException(
-                        string.Format("Unsupported render part type: {0}",
-                                      type.ToString()));
-            }
+            throw new Exception(string.Format("trackedComponents didn't have {0}", component.name));
         }
+
+        ovrComponent.UpdateAvatar(component, this);
     }
 
     private static string GetRenderPartName(ovrAvatarComponent component, uint renderPartIndex)
@@ -237,7 +223,7 @@ public class OvrAvatar : MonoBehaviour {
     private void UpdateSDKAvatarUnityState()
     {
         //Iterate through all the render components
-        UInt64 componentCount = CAPI.ovrAvatarComponent_Count(sdkAvatar);
+        UInt32 componentCount = CAPI.ovrAvatarComponent_Count(sdkAvatar);
         HashSet<string> componentsThisRun = new HashSet<string>();
         for (UInt32 i = 0; i < componentCount; i++) {
             IntPtr ptr = CAPI.ovrAvatarComponent_Get_Native(sdkAvatar, i);
